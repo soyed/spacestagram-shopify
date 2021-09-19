@@ -16,6 +16,13 @@
 
 body {
   font-size: 1.4rem;
-  background-color: #07071a;
+  background-color: #120021;
+  font-family: 'Nunito', sans-serif;
+  color: white;
+}
+
+#root {
   display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }

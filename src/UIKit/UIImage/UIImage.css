@@ -1,0 +1,40 @@
+.image__container {
+  width: 35rem;
+  height: 35rem;
+  padding: 2rem;
+  position: relative;
+}
+
+.image__container img {
+  object-fit: cover;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.image__overlay {
+  position: absolute;
+  /* z-index: 1; */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  width: calc(100% - 4rem);
+  height: calc(100% - 4rem);
+  border-radius: 50%;
+  background-color: #ede9fe;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  transition: all 0.7s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+}
+
+.image__container img:hover {
+  opacity: 0.7;
+}
+
+.image__container:hover .image__overlay {
+  opacity: 0.5;
+}

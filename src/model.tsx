@@ -9,8 +9,11 @@ export interface Astronomy {
   copyright?: string;
   date?: string;
   explanation?: string;
-  hdurl?: string;
+  hdUrl?: string;
   mediaType?: string;
   serviceVersion?: string;
   title?: string;
+  url?: string;
+  // used track the post user have liked
+  isLiked?: boolean;
 }

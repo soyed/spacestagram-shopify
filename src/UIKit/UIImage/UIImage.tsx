@@ -1,6 +1,7 @@
 import React from 'react';
 import './UIImage.css';
 import classNames from 'classnames';
+import UIActionButton from '../UIActionButton/UIActionbutton';
 
 interface UIImageProps {
   image?: string;
@@ -8,7 +9,7 @@ interface UIImageProps {
   className?: string;
   onClickLike?: () => void;
   onClickMoreInformation?: () => void;
-  // isLiked?: boolean;
+  isLiked?: boolean;
 }
 
 const UIImage: React.FC<UIImageProps> = (props) => {
@@ -17,36 +18,26 @@ const UIImage: React.FC<UIImageProps> = (props) => {
     image,
     imageAlternative,
     onClickMoreInformation,
-    // isLiked = true,
+    onClickLike,
+    isLiked,
   } = props;
 
-  const [isLiked, setIsLiked] = React.useState<boolean>(false);
+  // const [isLiked, setIsLiked] = React.useState<boolean>(false);
 
-  const handleLiked = () => {
-    setIsLiked((prevState) => !prevState);
-  };
+  // const handleLiked = () => {
+  //   // setIsLiked((prevState) => !prevState);
+  //   onClickLike?.();
+  // };
 
   return (
     <div className={classNames('image__container', className)}>
       <img src={image} alt={imageAlternative} />
       <div className='image__overlay'>
-        <div className='overlay__action-buttons'>
-          <i
-            className={classNames(
-              'fas fa-heart action-button__heart',
-              `${isLiked ? 'action-button__heart--active' : ''}`,
-              {
-                'text-white': !isLiked,
-                'text-red-600': isLiked,
-              }
-            )}
-            onClick={handleLiked}
-          ></i>
-          <i
-            className={classNames('fas fa-info action-button__info')}
-            onClick={onClickMoreInformation}
-          ></i>
-        </div>
+        <UIActionButton
+          isLiked={isLiked}
+          onClickLike={onClickLike}
+          onClickMoreInformation={onClickMoreInformation}
+        />
       </div>
     </div>
   );

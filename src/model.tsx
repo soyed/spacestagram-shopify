@@ -7,7 +7,7 @@ export enum MediaType {
 
 export interface Astronomy {
   copyright?: string;
-  date?: string;
+  date: string;
   explanation?: string;
   hdUrl?: string;
   mediaType?: MediaType;

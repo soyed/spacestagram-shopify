@@ -1,0 +1,52 @@
+.overlay__action-buttons {
+  display: flex;
+  width: 40%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.overlay__action-buttons i {
+  font-size: 4rem;
+  text-shadow: -0.1rem 0.3rem 1rem #12002131;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.action-button__heart:hover {
+  color: rgb(240, 10, 10);
+}
+
+.action-button__info:hover {
+  color: rgba(255, 255, 10, 0.863);
+}
+
+.action-button__close:hover {
+  color: #6b7280d7;
+}
+
+.action-button__heart--active {
+  animation: animateHeart 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s;
+  color: red;
+}
+
+@keyframes animateHeart {
+  0% {
+    transform: scale(1) translateY(-4rem);
+  }
+
+  25% {
+    transform: scale(1.2) translateY(-3rem);
+  }
+
+  50% {
+    transform: rotate(360deg);
+  }
+
+  75% {
+    transform: translateY(-1rem);
+  }
+
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}

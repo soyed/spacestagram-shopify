@@ -9,6 +9,9 @@ module.exports = {
       height: {
         'header-height': '15vh',
       },
+      screens: {
+        sm: { max: '640px' },
+      },
     },
   },
   variants: {

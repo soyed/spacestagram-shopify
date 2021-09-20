@@ -21,25 +21,28 @@ const CardActionBar: React.FC<CardActionBarProps> = (props) => {
   };
 
   return (
-    <div className='flex bg-purple-100 justify-between items-center w-4/5 mb-8 mt-10 h-24 rounded text-black p-6'>
+    <div className='flex bg-purple-100 justify-between items-center w-4/5 mb-8 mt-10 h-24 rounded text-black p-6 sm:flex-col sm:justify-evenly sm:h-auto'>
       {/* Select Explore and Like page */}
-      <div className='flex justify-evenly items-center ml-8'>
+      <div className='flex justify-evenly items-center ml-8 sm:ml-0 sm:mb-8'>
         <h2
-          className='mr-9 hover:text-white hover:bg-purple-600 active:bg-purple-800 p-4 font-bold text-3xl active:shadow-lg transition-all cursor-pointer'
+          className='mr-9 hover:text-white hover:bg-purple-500 active:bg-purple-800 p-4 font-bold text-3xl active:shadow-lg transition-all cursor-pointer'
           onClick={onClickExplore}
         >
           Explore
         </h2>
         <h2
-          className='hover:text-white  text-3xl  hover:bg-purple-600 active:bg-purple-800 p-4 font-bold active:shadow-lg transition-all cursor-pointer'
+          className='hover:text-white  text-3xl  hover:bg-purple-500 active:bg-purple-800 p-4 font-bold active:shadow-lg transition-all cursor-pointer'
           onClick={onClickLiked}
         >
           Liked
         </h2>
       </div>
       {/* Data Picker to fetch Data */}
-      {/* Date must be between Jun 16, 1995 and Sep 19, 2021 -  date allowed */}
-      <DateRangePicker value={selectedDate} onChange={handleSelectedDate} />
+      <DateRangePicker
+        value={selectedDate}
+        onChange={handleSelectedDate}
+        minDate={new Date(1995, 5, 16)}
+      />
     </div>
   );
 };

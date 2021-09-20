@@ -1,6 +1,7 @@
 import React from 'react';
 import './UIModal.css';
 import ReactDOM from 'react-dom';
+import ClassNames from 'classnames';
 
 interface UIModalProps {
   onClickBackdrop?: () => void;
@@ -16,7 +17,12 @@ interface UIModalBackdropProps {
 
 const UIModalBackdrop: React.FC<UIModalBackdropProps> = (props) => {
   const { onClick } = props;
-  return <div className='backdrop' onClick={onClick}></div>;
+  return (
+    <div
+      className={ClassNames('backdrop', 'bg-purple-100')}
+      onClick={onClick}
+    ></div>
+  );
 };
 
 const UIModalOverlay: React.FC<UIModalOverlayProps> = (props) => {

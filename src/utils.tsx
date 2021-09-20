@@ -2,7 +2,7 @@ import { API_KEY } from './model';
 
 export const getJSON = async (startDate?: string, endDate?: string) => {
   return fetch(
-    `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}${
+    `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}${`&thumbs=true`}${
       startDate ? `&start_date=${startDate}` : ''
     }${endDate ? `&end_date=${endDate}` : ''}`
   );

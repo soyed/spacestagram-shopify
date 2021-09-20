@@ -1,7 +1,7 @@
 export const API_KEY = 'OFiepJmDbN4gns9AwVwrstP8BlsSU6n3SoCHGhXT';
 
 export enum MediaType {
-  MEDIA = 'media',
+  IMAGE = 'image',
   VIDEO = 'video',
 }
 
@@ -10,10 +10,11 @@ export interface Astronomy {
   date?: string;
   explanation?: string;
   hdUrl?: string;
-  mediaType?: string;
+  mediaType?: MediaType;
   serviceVersion?: string;
   title?: string;
   url?: string;
+  thumbnailUrl?: string;
   // used track the post user have liked
   isLiked?: boolean;
 }

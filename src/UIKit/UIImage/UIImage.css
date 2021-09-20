@@ -17,7 +17,6 @@
 
 .image__overlay {
   position: absolute;
-  /* z-index: 1; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -25,21 +24,17 @@
   width: calc(100%);
   height: calc(100%);
   border-radius: 50%;
-  opacity: 1;
-  background-color: #ede9fe;
+  background-color: #ede9fe13;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  cursor: pointer;
 
   transition: all 0.7s cubic-bezier(0.895, 0.03, 0.685, 0.22);
 }
 
-.image__container:hover img {
-  opacity: 0.7;
-}
-
 .image__container:hover .image__overlay {
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .overlay__action-buttons {
@@ -51,13 +46,20 @@
 
 .overlay__action-buttons i {
   font-size: 4rem;
-  /* color: gray; */
-  text-shadow: 0 0 3px gray;
-  cursor: pointer;
-  opacity: 1;
+  /* color: white; */
+  text-shadow: -0.1rem 0.3rem 1rem #12002131;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.action-button__heart:active {
+.action-button__heart:hover {
+  color: rgb(240, 10, 10);
+}
+
+.action-button__info:hover {
+  color: rgba(255, 255, 10, 0.863);
+}
+
+.action-button__heart--active {
   animation: animateHeart 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s;
   color: red;
 }

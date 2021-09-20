@@ -1,5 +1,4 @@
 import React from 'react';
-import './CardActionBar.css';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { setDefaultDate } from '../../utils';
 
@@ -22,13 +21,19 @@ const CardActionBar: React.FC<CardActionBarProps> = (props) => {
   };
 
   return (
-    <div className='flex bg-purple-100 justify-evenly items-center w-4/5 mb-8 mt-10 h-24 rounded text-black p-6'>
+    <div className='flex bg-purple-100 justify-between items-center w-4/5 mb-8 mt-10 h-24 rounded text-black p-6'>
       {/* Select Explore and Like page */}
-      <div className='flex justify-evenly items-center'>
-        <h2 className='' onClick={onClickExplore}>
+      <div className='flex justify-evenly items-center ml-8'>
+        <h2
+          className='mr-9 hover:text-white hover:bg-purple-600 active:bg-purple-800 p-4 font-bold text-3xl active:shadow-lg transition-all cursor-pointer'
+          onClick={onClickExplore}
+        >
           Explore
         </h2>
-        <h2 className='' onClick={onClickLiked}>
+        <h2
+          className='hover:text-white  text-3xl  hover:bg-purple-600 active:bg-purple-800 p-4 font-bold active:shadow-lg transition-all cursor-pointer'
+          onClick={onClickLiked}
+        >
           Liked
         </h2>
       </div>

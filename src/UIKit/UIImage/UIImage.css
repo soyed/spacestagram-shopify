@@ -46,7 +46,6 @@
 
 .overlay__action-buttons i {
   font-size: 4rem;
-  /* color: white; */
   text-shadow: -0.1rem 0.3rem 1rem #12002131;
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }

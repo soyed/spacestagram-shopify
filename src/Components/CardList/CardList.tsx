@@ -90,53 +90,51 @@ const CardList: React.FC<CardListProps> = (props) => {
   const [likedAstronomy, setLikedAstronomy] = React.useState<Astronomy[]>();
 
   // Hooks
-  // React.useEffect(() => {
-  //   const fetchAstronomy = async () => {
-  //     setIsLoading(true);
+  React.useEffect(() => {
+    const fetchAstronomy = async () => {
+      setIsLoading(true);
 
-  //     const response = await getJSON(selectedDate[0], selectedDate[1]);
+      const response = await getJSON(selectedDate[0], selectedDate[1]);
 
-  //     if (!response.ok) {
-  //       throw new Error(`${response.status} - ${response.statusText}`);
-  //     }
+      if (!response.ok) {
+        throw new Error(`${response.status} - ${response.statusText}`);
+      }
 
-  //     const responseData = await response.json();
+      const responseData = await response.json();
 
-  //     const fetchedData: Astronomy[] = [];
+      const fetchedData: Astronomy[] = [];
 
-  //     // Parsed Data and set isLiked to false
-  //     for (let key in responseData) {
-  //       fetchedData.push({
-  //         copyright: responseData[key].copyright,
-  //         date: responseData[key].date,
-  //         explanation: responseData[key].explanation,
-  //         hdUrl: responseData[key].hdurl,
-  //         mediaType:
-  //           responseData[key].media_type === 'video'
-  //             ? MediaType.VIDEO
-  //             : MediaType.IMAGE,
-  //         title: responseData[key].title,
-  //         url: responseData[key].url,
-  //         thumbnailUrl: responseData[key].thumbnail_url,
-  //         isLiked: false,
-  //       });
-  //     }
-  //     console.log(fetchedData);
+      // Parsed Data and set isLiked to false
+      for (let key in responseData) {
+        fetchedData.push({
+          copyright: responseData[key].copyright,
+          date: responseData[key].date,
+          explanation: responseData[key].explanation,
+          hdUrl: responseData[key].hdurl,
+          mediaType:
+            responseData[key].media_type === 'video'
+              ? MediaType.VIDEO
+              : MediaType.IMAGE,
+          title: responseData[key].title,
+          url: responseData[key].url,
+          thumbnailUrl: responseData[key].thumbnail_url,
+          isLiked: false,
+        });
+      }
 
-  //     setAstronomyList(fetchedData);
-  //     setIsLoading(false);
-  //   };
+      setAstronomyList(fetchedData);
+      setIsLoading(false);
+    };
 
-  //   fetchAstronomy().catch((error) => {
-  //     setErrorMessage(error.message);
-  //   });
-  // }, [selectedDate]);
+    fetchAstronomy().catch((error) => {
+      setErrorMessage(error.message);
+    });
+  }, [selectedDate]);
 
   // methods
 
   const onClickShowInfo = (index: number) => {
     setShowInfoModal(true);
-    console.log(index);
     setSelectedAstronomy(data[index]);
     setSelectedAstronomy(astronomyList[index]);
   };
@@ -161,7 +159,7 @@ const CardList: React.FC<CardListProps> = (props) => {
           <UILoadingSpinner />
         ) : isExploreActive ? (
           <div className='flex flex-wrap justify-center p-8'>
-            {data.map((card, index) => (
+            {astronomyList.map((card, index) => (
               <UIImage
                 key={index}
                 image={
@@ -184,10 +182,6 @@ const CardList: React.FC<CardListProps> = (props) => {
       {showInfoModal && (
         <UIModal onClickBackdrop={hideInfoModal}>
           <UICard
-            // title={data[0].title}
-            // image={data[0].hdurl}
-            // description={data[0].explanation}
-            // datePosted={data[0].date}
             title={selectedAstronomy.title}
             image={
               selectedAstronomy.mediaType !== MediaType.VIDEO

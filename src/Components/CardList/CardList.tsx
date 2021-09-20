@@ -5,6 +5,7 @@ import UICard from '../../UIKit/UICard/UICard';
 import UIImage from '../../UIKit/UIImage/UIImage';
 import UILoadingSpinner from '../../UIKit/UILoadingSpinner/UILoadingSpinner';
 import { getJSON } from '../../utils';
+import isEqual from 'lodash/isEqual';
 
 const data: Astronomy[] = [
   {
@@ -147,25 +148,46 @@ const CardList: React.FC<CardListProps> = (props) => {
     setShowInfoModal(false);
   };
 
+  const checkExistingLikedPost = (updatedPost: Astronomy): number => {
+    return likedAstronomy.findIndex((astronomy) =>
+      isEqual(astronomy, updatedPost)
+    );
+  };
+
   const handleLikeButton = (index: number) => {
     // Grab the liked Astronomy Post
-    // const likedPost = {
-    //   ...data[index],
-    //   isLiked: !data[index].isLiked,
-    // };
-    // data[index] = likedPost;
-
+    // mutate isLiked property
     const likedPost = {
       ...astronomyList[index],
       isLiked: !astronomyList[index].isLiked,
     };
-    astronomyList[index] = likedPost;
+    // create new astronomy list and update content of that index
+    const newAstronomyList = [...astronomyList];
+    let newLikedAstronomyList = [...likedAstronomy];
+    newAstronomyList[index] = likedPost;
 
-    // likedAstronomy.push(likedPost);
+    // While this happens, update the likedAstronomy list if the astronomy has already been liked and exist in the array, simply remove it else if it does not exist add that new astronomy to likedAstronomy List
 
-    setLikedAstronomy((prevState) => [...prevState, likedPost]);
+    // Check if astronomy exist in the array
+    const existingIndex = checkExistingLikedPost(astronomyList[index]);
+    if (existingIndex !== -1) {
+      if (likedPost.isLiked) {
+        debugger;
+        newLikedAstronomyList[existingIndex] = likedPost;
+      } else {
+        newLikedAstronomyList[existingIndex] = likedPost;
+        newLikedAstronomyList = newLikedAstronomyList.filter(
+          (astronomy) => !isEqual(astronomy, newAstronomyList[index])
+        );
+        debugger;
+      }
+    } else {
+      newLikedAstronomyList = [...newLikedAstronomyList, likedPost];
+    }
 
-    // const likedPost = astronomyList[index];
+    // update Astronomy List and Liked Astronomy List
+    setAstronomyList(newAstronomyList);
+    setLikedAstronomy(newLikedAstronomyList);
   };
 
   return (
@@ -205,8 +227,8 @@ const CardList: React.FC<CardListProps> = (props) => {
                         : card.thumbnailUrl
                     }
                     imageAlternative={card.title}
-                    onClickMoreInformation={onClickShowInfo.bind(this, index)}
-                    onClickLike={handleLikeButton.bind(this, index)}
+                    // onClickMoreInformation={onClickShowInfo.bind(this, index)}
+                    // onClickLike={handleLikeButton.bind(this, index)}
                     isLiked={card.isLiked}
                   />
                 ))}

@@ -25,14 +25,14 @@ const CardSection: React.FC = (props) => {
 
   return (
     <div className='flex flex-col justify-center items-center w-screen '>
-      <CardActionBar
+      {/* <CardActionBar
         onClickExplore={showExploreSection}
         onClickLiked={showLikedSection}
         dateToFetch={handleSelectedDates}
-      />
+      /> */}
       <CardList
-        isExploreActive={showExplore}
-        selectedDate={parseSelectedDates(selectedDate)}
+      // isExploreActive={showExplore}
+      // selectedDate={parseSelectedDates(selectedDate)}
       />
     </div>
   );

@@ -22,13 +22,6 @@ const UIImage: React.FC<UIImageProps> = (props) => {
     isLiked,
   } = props;
 
-  // const [isLiked, setIsLiked] = React.useState<boolean>(false);
-
-  // const handleLiked = () => {
-  //   // setIsLiked((prevState) => !prevState);
-  //   onClickLike?.();
-  // };
-
   return (
     <div className={classNames('image__container', className)}>
       <img src={image} alt={imageAlternative} />

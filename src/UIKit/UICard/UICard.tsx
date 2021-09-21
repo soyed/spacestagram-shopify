@@ -44,7 +44,7 @@ const UICard: React.FC<UICardProps> = (props) => {
           <p className='card--content__copyright'>&copy;{copyright}</p>
         )}
         <p className='card--content__Date'>Date Posted: {datePosted}</p>
-        <p className='card--content__description'>{description}</p>
+        <p className='card--content__description text-justify'>{description}</p>
         <hr className='my-6' />
         <UIActionButton
           isLiked={isLiked}

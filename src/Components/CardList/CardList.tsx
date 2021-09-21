@@ -12,15 +12,9 @@ import {
 } from '../../utils';
 import isEqual from 'lodash/isEqual';
 import CardActionBar from '../CardActionBar/CardActionBar';
-interface CardListProps {
-  // isExploreActive?: boolean;
-  // selectedDate: string[];
-}
+interface CardListProps {}
 
 const CardList: React.FC<CardListProps> = (props) => {
-  // const { isExploreActive, selectedDate } = props;
-  // const { isExploreActive } = props;
-
   // States
   // Card Action Bar
   const [showExplore, setShowExplore] = React.useState<boolean>(true);
@@ -33,12 +27,14 @@ const CardList: React.FC<CardListProps> = (props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [astronomyList, setAstronomyList] = React.useState<Astronomy[]>([]);
+  const [likedAstronomy, setLikedAstronomy] = React.useState<Astronomy[]>([]);
   const [showInfoModal, setShowInfoModal] = React.useState<boolean>(false);
-  // const [showLikedSection, setShowLikedSection] =
-  //   React.useState<boolean>(false);
+  const [selectedAstronomy, setSelectedAstronomy] =
+    React.useState<Astronomy>(null);
   const [selectedAstronomyIndex, setSelectedAstronomyIndex] =
     React.useState<number>(null);
-  const [likedAstronomy, setLikedAstronomy] = React.useState<Astronomy[]>([]);
+  const [selectedLikedIndex, setSelectedLikedIndex] =
+    React.useState<number>(null);
 
   // Card Action Bar Methods
 
@@ -52,7 +48,6 @@ const CardList: React.FC<CardListProps> = (props) => {
 
   const handleSelectedDates = (dateToFetch: string[]) => {
     setDateToFetch(dateToFetch);
-    const data = parseSelectedDates(dateToFetch);
   };
 
   // Hooks
@@ -62,11 +57,11 @@ const CardList: React.FC<CardListProps> = (props) => {
       const selectedDate = parseSelectedDates(dateToFetch);
       const response = await getJSON(selectedDate[0], selectedDate[1]);
 
-      if (!response.ok) {
-        throw new Error(`${response.status} - ${response.statusText}`);
-      }
+      let responseData = await response.json();
 
-      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(`${responseData.code} - ${responseData.msg}`);
+      }
 
       const fetchedData: Astronomy[] = [];
 
@@ -99,6 +94,7 @@ const CardList: React.FC<CardListProps> = (props) => {
 
     fetchAstronomy().catch((error) => {
       setErrorMessage(error.message);
+      setIsLoading(false);
     });
   }, [dateToFetch]);
 
@@ -107,6 +103,12 @@ const CardList: React.FC<CardListProps> = (props) => {
   const onClickShowInfo = (index: number) => {
     setShowInfoModal(true);
     setSelectedAstronomyIndex(index);
+  };
+
+  const onClickShowLikedInfo = (index: number) => {
+    setShowInfoModal(true);
+    setSelectedAstronomy(likedAstronomy[index]);
+    setSelectedLikedIndex(index);
   };
 
   const hideInfoModal = () => {
@@ -166,9 +168,16 @@ const CardList: React.FC<CardListProps> = (props) => {
 
     //  mutate the existing astronomy in astronomyList and LikedAstronomyList
     newAstronomyList[unLikedAstronomy] = editedAstronomy;
-    newLikedAstronomyList[index] = editedAstronomy;
+    // newAstronomyList = [...newAstronomyList, editedAstronomy];
+
     // remove the mutated LikedPost from the array of LikedAstronomy, and update astronomyList with the mutated posted
-    newAstronomyList = [...newAstronomyList, editedAstronomy];
+    newLikedAstronomyList[index] = editedAstronomy;
+
+    // When remove an already existing astronomy update the selected Astronomy with the new state of isLiked
+    if (selectedAstronomy) {
+      setSelectedAstronomy(editedAstronomy);
+    }
+
     newLikedAstronomyList = newLikedAstronomyList.filter(
       (astronomy) => astronomy.isLiked
     );
@@ -176,6 +185,105 @@ const CardList: React.FC<CardListProps> = (props) => {
     // updates the two Arrays
     setAstronomyList(newAstronomyList);
     setLikedAstronomy(newLikedAstronomyList);
+  };
+
+  const toggleLikeFromModal = (index: number, newPost: Astronomy) => {
+    //  If Liked Astronomy is empty simple add that value and mutate the Astronomy List
+    //  if not empty, and liked is clicked, button object does not exist
+    //  Add it to the array and update the status on the Astronomy List
+    // else do the same
+
+    let newAstronomyList = [...astronomyList];
+    let newLikedAstronomyList = [...likedAstronomy];
+    const editedAstronomy: Astronomy = {
+      ...newPost,
+      isLiked: !newPost.isLiked,
+    };
+
+    const toggledPostIndex = astronomyList.findIndex(
+      (astronomy) => astronomy.date === newPost.date
+    );
+
+    const existingIndex = checkExistingLikedPost(newPost);
+    if (existingIndex !== -1) {
+      removeLikedPosted(index);
+    } else {
+      newAstronomyList[toggledPostIndex] = editedAstronomy;
+      newLikedAstronomyList = [...newLikedAstronomyList, editedAstronomy];
+      // Update the content of the selected Astronomy to reflect new state of isLiked and prevent duplication
+      setSelectedAstronomy(editedAstronomy);
+      setAstronomyList(newAstronomyList);
+      setLikedAstronomy(newLikedAstronomyList);
+    }
+  };
+
+  const Card = () => {
+    if (isLoading) {
+      return (
+        <UILoadingSpinner
+          containerClassName={'flex flex-1 h-full justify-center items-center'}
+        />
+      );
+    }
+
+    if (errorMessage.length !== 0) {
+      return (
+        <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-red-600 sm:p-20 font-bold'>
+          {errorMessage}
+        </div>
+      );
+    }
+
+    if (showExplore) {
+      return (
+        <div className='flex flex-wrap justify-center p-8'>
+          {astronomyList.map((card, index) => (
+            <UIImage
+              key={index}
+              image={
+                card.mediaType !== MediaType.VIDEO
+                  ? card.hdUrl
+                  : card.thumbnailUrl
+              }
+              imageAlternative={card.title}
+              onClickMoreInformation={onClickShowInfo.bind(this, index)}
+              onClickLike={handleLikeButton.bind(this, index)}
+              isLiked={card.isLiked}
+            />
+          ))}
+        </div>
+      );
+    } else {
+      return (
+        <>
+          {likedAstronomy.length === 0 ? (
+            <h1 className='bg-purple-300 flex justify-center items-center p-12  h-40 text-4xl font-bold sm:w-4/5 sm:p-20'>
+              No Liked Photos
+            </h1>
+          ) : (
+            <div className='flex flex-wrap justify-center p-8'>
+              {likedAstronomy.map((card, index) => (
+                <UIImage
+                  key={index}
+                  image={
+                    card.mediaType !== MediaType.VIDEO
+                      ? card.hdUrl
+                      : card.thumbnailUrl
+                  }
+                  imageAlternative={card.title}
+                  onClickMoreInformation={onClickShowLikedInfo.bind(
+                    this,
+                    index
+                  )}
+                  onClickLike={removeLikedPosted.bind(this, index)}
+                  isLiked={card.isLiked}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      );
+    }
   };
 
   return (
@@ -186,66 +294,56 @@ const CardList: React.FC<CardListProps> = (props) => {
         dateToFetch={handleSelectedDates}
       />
       <div className='flex flex-col flex-1 justify-center items-center'>
-        {isLoading === true ? (
-          <UILoadingSpinner />
-        ) : showExplore ? (
-          <div className='flex flex-wrap justify-center p-8'>
-            {astronomyList.map((card, index) => (
-              <UIImage
-                key={index}
-                image={
-                  card.mediaType !== MediaType.VIDEO
-                    ? card.hdUrl
-                    : card.thumbnailUrl
-                }
-                imageAlternative={card.title}
-                onClickMoreInformation={onClickShowInfo.bind(this, index)}
-                onClickLike={handleLikeButton.bind(this, index)}
-                isLiked={card.isLiked}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className='flex flex-1 justify-center  h-screen'>
-            {likedAstronomy.length === 0 ? (
-              <h1 className='text-4xl font-bold'>No Liked Photos</h1>
-            ) : (
-              <div className='flex flex-wrap justify-center p-8'>
-                {likedAstronomy.map((card, index) => (
-                  <UIImage
-                    key={index}
-                    image={
-                      card.mediaType !== MediaType.VIDEO
-                        ? card.hdUrl
-                        : card.thumbnailUrl
-                    }
-                    imageAlternative={card.title}
-                    onClickMoreInformation={onClickShowInfo.bind(this, index)}
-                    onClickLike={removeLikedPosted.bind(this, index)}
-                    isLiked={card.isLiked}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+        <Card />
       </div>
       {showInfoModal && (
         <UIModal onClickBackdrop={hideInfoModal}>
           <UICard
-            title={astronomyList[selectedAstronomyIndex].title}
-            copyright={astronomyList[selectedAstronomyIndex].copyright}
-            image={
-              astronomyList[selectedAstronomyIndex].mediaType !==
-              MediaType.VIDEO
-                ? astronomyList[selectedAstronomyIndex].hdUrl
-                : astronomyList[selectedAstronomyIndex].thumbnailUrl
+            title={
+              showExplore
+                ? astronomyList[selectedAstronomyIndex].title
+                : selectedAstronomy.title
             }
-            description={astronomyList[selectedAstronomyIndex].explanation}
-            datePosted={astronomyList[selectedAstronomyIndex].date}
-            isLiked={astronomyList[selectedAstronomyIndex].isLiked}
+            copyright={
+              showExplore
+                ? astronomyList[selectedAstronomyIndex].copyright
+                : selectedAstronomy.copyright
+            }
+            image={
+              showExplore
+                ? astronomyList[selectedAstronomyIndex].mediaType !==
+                  MediaType.VIDEO
+                  ? astronomyList[selectedAstronomyIndex].hdUrl
+                  : astronomyList[selectedAstronomyIndex].thumbnailUrl
+                : selectedAstronomy.mediaType !== MediaType.VIDEO
+                ? selectedAstronomy.hdUrl
+                : selectedAstronomy.thumbnailUrl
+            }
+            description={
+              showExplore
+                ? astronomyList[selectedAstronomyIndex].explanation
+                : selectedAstronomy.explanation
+            }
+            datePosted={
+              showExplore
+                ? astronomyList[selectedAstronomyIndex].date
+                : selectedAstronomy.date
+            }
+            isLiked={
+              showExplore
+                ? astronomyList[selectedAstronomyIndex].isLiked
+                : selectedAstronomy.isLiked
+            }
             closeShowInfoModal={hideInfoModal}
-            onClickLike={handleLikeButton.bind(this, selectedAstronomyIndex)}
+            onClickLike={
+              showExplore
+                ? handleLikeButton.bind(this, selectedAstronomyIndex)
+                : toggleLikeFromModal.bind(
+                    this,
+                    selectedLikedIndex,
+                    selectedAstronomy
+                  )
+            }
           />
         </UIModal>
       )}

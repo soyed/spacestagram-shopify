@@ -231,13 +231,13 @@ const CardList: React.FC<CardListProps> = (props) => {
       );
     }
 
-    if (errorMessage) {
-      return (
-        <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-red-600 sm:p-20 font-bold'>
-          {errorMessage}
-        </div>
-      );
-    }
+    // if (errorMessage) {
+    //   return (
+    //     <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-red-600 sm:p-20 font-bold'>
+    //       {errorMessage}
+    //     </div>
+    //   );
+    // }
 
     if (showExplore) {
       return (

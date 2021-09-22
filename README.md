@@ -2,11 +2,11 @@
 
 
 ### technologies 
-![Typescript]
-![React]
-![HTML5]
-![Tailwind CSS]
-![CSS]
+- Typescript
+- React
+- HTML5
+- Tailwind CSS
+- CSS
 
 ### Credits 
  - NASA API - APOD

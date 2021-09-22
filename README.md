@@ -1,4 +1,4 @@
-![header] Spacestagram Shopify's Frontend Winter 2022 Challenge
+Spacestagram Shopify's Frontend Winter 2022 Challenge
 
 
 ### technologies 

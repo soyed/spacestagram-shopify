@@ -234,12 +234,18 @@ const CardList: React.FC<CardListProps> = (props) => {
       );
     }
 
+    if (!astronomyList.length || astronomyList.length === 0) {
+      return (
+        <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-black sm:p-20 font-bold'>
+          Please select Dates to Fetch in the Action Bar Above.
+        </div>
+      );
+    }
+
     if (hasError) {
       return (
         <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-red-600 sm:p-20 font-bold'>
-          {astronomyList.length === 0
-            ? 'Please select Dates to Fetch in the Action Bar Above.'
-            : errorMessage}
+          {errorMessage}
         </div>
       );
     }

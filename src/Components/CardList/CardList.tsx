@@ -25,7 +25,8 @@ const CardList: React.FC<CardListProps> = (props) => {
 
   // Card List
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const [errorMessage, setErrorMessage] = React.useState<string>(null);
+  const [hasError, setHasError] = React.useState<boolean>(false);
   const [astronomyList, setAstronomyList] = React.useState<Astronomy[]>([]);
   const [likedAstronomy, setLikedAstronomy] = React.useState<Astronomy[]>([]);
   const [showInfoModal, setShowInfoModal] = React.useState<boolean>(false);
@@ -89,9 +90,11 @@ const CardList: React.FC<CardListProps> = (props) => {
           sortAstronomy(new Date(b.date), new Date(a.date))
         );
         setAstronomyList(fetchedData);
+        setHasError(false);
         setIsLoading(false);
       } catch (error) {
         setErrorMessage(String(error));
+        setHasError(true);
         setIsLoading(false);
       }
     };
@@ -231,13 +234,19 @@ const CardList: React.FC<CardListProps> = (props) => {
       );
     }
 
-    // if (errorMessage) {
-    //   return (
-    //     <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-red-600 sm:p-20 font-bold'>
-    //       {errorMessage}
-    //     </div>
-    //   );
-    // }
+    if (!astronomyList) {
+      <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-black sm:p-20 font-bold'>
+        Please select Dates to Fetch in the Action Bar Above.
+      </div>;
+    }
+
+    if (hasError) {
+      return (
+        <div className='bg-purple-100 flex justify-center items-center p-12 h-40  sm:w-4/5 text-red-600 sm:p-20 font-bold'>
+          {errorMessage}
+        </div>
+      );
+    }
 
     if (showExplore) {
       return (

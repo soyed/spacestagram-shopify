@@ -2,9 +2,11 @@ import React from 'react';
 import './UIImage.css';
 import classNames from 'classnames';
 import UIActionButton from '../UIActionButton/UIActionbutton';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 interface UIImageProps {
   image?: string;
+  lazyImage?: string;
   imageAlternative?: string;
   className?: string;
   onClickLike?: () => void;
@@ -20,11 +22,18 @@ const UIImage: React.FC<UIImageProps> = (props) => {
     onClickMoreInformation,
     onClickLike,
     isLiked,
+    lazyImage,
   } = props;
 
   return (
     <div className={classNames('image__container', className)}>
-      <img src={image} alt={imageAlternative} />
+      <LazyLoadImage
+        src={image}
+        alt={imageAlternative}
+        visibleByDefault={true}
+        effect={'blur'}
+        delayTime={'50'}
+      />
       <div className='image__overlay'>
         <UIActionButton
           isLiked={isLiked}

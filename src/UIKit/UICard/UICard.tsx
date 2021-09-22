@@ -2,7 +2,7 @@ import React from 'react';
 import './UICard.css';
 import classNames from 'classnames';
 import UIActionButton from '../UIActionButton/UIActionbutton';
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 interface UICardProps {
   title?: string;
   description?: string;
@@ -35,7 +35,13 @@ const UICard: React.FC<UICardProps> = (props) => {
     <div className={classNames('card', cardClassName)}>
       {/* Img section */}
       <div className='card--img__content'>
-        <img src={image} alt={imageAlternative} />
+        <LazyLoadImage
+          src={image}
+          alt={imageAlternative}
+          visibleByDefault={true}
+          effect={'blur'}
+          delayTime={'50'}
+        />
       </div>
       {/* Content section */}
       <div className='card__content'>

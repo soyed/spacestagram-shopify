@@ -32,6 +32,6 @@
   transition: all 0.7s cubic-bezier(0.895, 0.03, 0.685, 0.22);
 }
 
-.image__container:hover .image__overlay {
+.image__overlay:hover {
   opacity: 1;
 }

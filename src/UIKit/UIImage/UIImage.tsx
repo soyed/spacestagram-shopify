@@ -34,6 +34,7 @@ const UIImage: React.FC<UIImageProps> = (props) => {
         effect={'blur'}
         delayTime={'25'}
       />
+
       <div className='image__overlay'>
         <UIActionButton
           isLiked={isLiked}

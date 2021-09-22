@@ -40,7 +40,7 @@ const UICard: React.FC<UICardProps> = (props) => {
           alt={imageAlternative}
           visibleByDefault={true}
           effect={'blur'}
-          delayTime={'50'}
+          delayTime={'25'}
         />
       </div>
       {/* Content section */}

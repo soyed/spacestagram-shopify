@@ -32,7 +32,7 @@ const UIImage: React.FC<UIImageProps> = (props) => {
         alt={imageAlternative}
         visibleByDefault={true}
         effect={'blur'}
-        delayTime={'50'}
+        delayTime={'25'}
       />
       <div className='image__overlay'>
         <UIActionButton

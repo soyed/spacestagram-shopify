@@ -51,93 +51,57 @@ const CardList: React.FC<CardListProps> = (props) => {
   };
 
   // Hooks
-
-  const fetchAstronomy = React.useCallback(async () => {
-    setIsLoading(true);
-    const selectedDate = parseSelectedDates(dateToFetch);
-    const response = await getJSON(selectedDate[0], selectedDate[1]);
-
-    let responseData = await response.json();
-
-    if (!response.ok) {
-      throw new Error(`${responseData.code} - ${responseData.msg}`);
-    }
-
-    const fetchedData: Astronomy[] = [];
-
-    // Parsed Data and set isLiked to false
-    for (let key in responseData) {
-      fetchedData.push({
-        copyright: responseData[key].copyright,
-        date: responseData[key].date,
-        explanation: responseData[key].explanation,
-        hdUrl: responseData[key].hdurl,
-        mediaType:
-          responseData[key].media_type === 'video'
-            ? MediaType.VIDEO
-            : MediaType.IMAGE,
-        title: responseData[key].title,
-        url: responseData[key].url,
-        thumbnailUrl: responseData[key].thumbnail_url,
-        isLiked: false,
-      });
-    }
-
-    // Sort List of Astronomy in other of Date posted
-    fetchedData.sort((a, b) =>
-      sortAstronomy(new Date(b.date), new Date(a.date))
-    );
-
-    setAstronomyList(fetchedData);
-    setIsLoading(false);
-  }, [dateToFetch]);
-
   React.useEffect(() => {
-    // const fetchAstronomy = async () => {
-    //   setIsLoading(true);
-    //   const selectedDate = parseSelectedDates(dateToFetch);
-    //   const response = await getJSON(selectedDate[0], selectedDate[1]);
+    const fetchAstronomy = async () => {
+      try {
+        setIsLoading(true);
+        const selectedDate = parseSelectedDates(dateToFetch);
+        const response = await getJSON(selectedDate[0], selectedDate[1]);
 
-    //   let responseData = await response.json();
+        let responseData = await response.json();
 
-    //   if (!response.ok) {
-    //     throw new Error(`${responseData.code} - ${responseData.msg}`);
-    //   }
+        if (!response.ok) {
+          throw new Error(`${responseData.code} - ${responseData.msg}`);
+        }
 
-    //   const fetchedData: Astronomy[] = [];
+        const fetchedData: Astronomy[] = [];
 
-    //   // Parsed Data and set isLiked to false
-    //   for (let key in responseData) {
-    //     fetchedData.push({
-    //       copyright: responseData[key].copyright,
-    //       date: responseData[key].date,
-    //       explanation: responseData[key].explanation,
-    //       hdUrl: responseData[key].hdurl,
-    //       mediaType:
-    //         responseData[key].media_type === 'video'
-    //           ? MediaType.VIDEO
-    //           : MediaType.IMAGE,
-    //       title: responseData[key].title,
-    //       url: responseData[key].url,
-    //       thumbnailUrl: responseData[key].thumbnail_url,
-    //       isLiked: false,
-    //     });
-    //   }
+        // Parsed Data and set isLiked to false
+        for (let key in responseData) {
+          fetchedData.push({
+            copyright: responseData[key].copyright,
+            date: responseData[key].date,
+            explanation: responseData[key].explanation,
+            hdUrl: responseData[key].hdurl,
+            mediaType:
+              responseData[key].media_type === 'video'
+                ? MediaType.VIDEO
+                : MediaType.IMAGE,
+            title: responseData[key].title,
+            url: responseData[key].url,
+            thumbnailUrl: responseData[key].thumbnail_url,
+            isLiked: false,
+          });
+        }
 
-    //   // Sort List of Astronomy in other of Date posted
-    //   fetchedData.sort((a, b) =>
-    //     sortAstronomy(new Date(b.date), new Date(a.date))
-    //   );
+        // Sort List of Astronomy in other of Date posted
+        fetchedData.sort((a, b) =>
+          sortAstronomy(new Date(b.date), new Date(a.date))
+        );
+        setAstronomyList(fetchedData);
+        setIsLoading(false);
+      } catch (error) {
+        setErrorMessage(String(error));
+        setIsLoading(false);
+      }
+    };
+    fetchAstronomy();
 
-    //   setAstronomyList(fetchedData);
+    // fetchAstronomy().catch((error) => {
+    //   setErrorMessage(error.message);
     //   setIsLoading(false);
-    // };
-
-    fetchAstronomy().catch((error) => {
-      setErrorMessage(error.message);
-      setIsLoading(false);
-    });
-  }, []);
+    // });
+  }, [dateToFetch]);
 
   // methods
 

@@ -11,10 +11,9 @@ interface CardActionBarProps {
 const CardActionBar: React.FC<CardActionBarProps> = (props) => {
   const { onClickExplore, onClickLiked, dateToFetch } = props;
 
-  const [selectedDate, setSelectedDate] = React.useState<any[]>([
-    new Date(),
-    new Date(),
-  ]);
+  const [selectedDate, setSelectedDate] = React.useState<any[]>(
+    setDefaultDate(false)
+  );
 
   const handleSelectedDate = (date: Date[]) => {
     dateToFetch([date[0].toISOString(), date[1].toISOString()]);
